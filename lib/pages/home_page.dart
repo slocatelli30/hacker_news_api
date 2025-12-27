@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
       /// altra chiamata http per ciascun id, http.get
       final response = await http.get(
         Uri.parse(
-          "https://hacker-news.firebaseio.com/v0/item/${storyId}.json?print=pretty",
+          "https://hacker-news.firebaseio.com/v0/item/$storyId.json?print=pretty",
         ),
       );
 
