@@ -133,9 +133,6 @@ class _HomePageState extends State<HomePage> {
 
             /// itemBuilder
             itemBuilder: (context, index) => ListTile(
-              /// colore della Tile
-              tileColor: Colors.white,
-
               /// title (titolo)
               title: Text(snapshot.data![index].title),
 
