@@ -1,0 +1,4 @@
+
+Per ogni articolo, permettere all'utente di fare click su di esso 
+e visualizzare il titolo e la descrizione. 
+Se quest'ultima non è disponibile, mostrare la scritta "Non disponibile"
