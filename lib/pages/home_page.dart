@@ -99,19 +99,35 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       // appBar
       appBar: AppBar(
-        /// title di AppBar
-        title: Text(
-          "News!",
-          // style di Text
-          style: TextStyle(color: Colors.black),
+        /// title di AppBar con Container
+        title: Container(
+          // padding
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Text(
+            "News!",
+            // style di Text
+            style: TextStyle(
+              // colore
+              color: Colors.white,
+              // dimensioni
+              fontSize: 17,
+              // grassetto
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
 
+        /// actions
         actions: [
           IconButton(
             // onPressed per il refresh
             onPressed: refreshData,
             // icona di refresh
-            icon: Icon(Icons.refresh),
+            icon: Icon(Icons.refresh_rounded),
           ),
         ],
 
@@ -154,7 +170,10 @@ class _HomePageState extends State<HomePage> {
             /// itemBuilder
             itemBuilder: (context, index) => ListTile(
               /// title (titolo)
-              title: Text(snapshot.data![index].title),
+              title: Text(
+                snapshot.data![index].title,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
 
               /// subtitle (autore)
               subtitle: Text(
