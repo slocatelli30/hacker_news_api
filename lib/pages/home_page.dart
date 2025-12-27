@@ -155,7 +155,17 @@ class _HomePageState extends State<HomePage> {
       /// se questa future non è stata ancora risolta
       if (snapshot.connectionState != ConnectionState.done) {
         // caricamento/loading
-        return CircularProgressIndicator();
+        return Container(
+          // colore di sfondo (Container)
+          color: Colors.white,
+          // allineamento del Container
+          alignment: Alignment.center,
+          // child di Container
+          child: CircularProgressIndicator(
+            // colore della CircularProgressIndicator
+            color: Colors.black,
+          ),
+        );
       } else {
         // ritorna un Container
         return Container(
