@@ -1,0 +1,7 @@
+
+link delle topstories:
+https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty
+
+link di una stories casuale:
+https://hacker-news.firebaseio.com/v0/item/46400251.json?print=pretty
+
