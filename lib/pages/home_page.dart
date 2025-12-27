@@ -157,7 +157,12 @@ class _HomePageState extends State<HomePage> {
               title: Text(snapshot.data![index].title),
 
               /// subtitle (autore)
-              subtitle: Text(snapshot.data![index].author),
+              subtitle: Text(
+                // autore
+                snapshot.data![index].author,
+                // stile di Text per autore
+                style: TextStyle(fontStyle: FontStyle.italic),
+              ),
             ),
 
             /// separatorBuilder
