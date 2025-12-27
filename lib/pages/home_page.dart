@@ -83,6 +83,15 @@ class _HomePageState extends State<HomePage> {
     return topStories;
   }
 
+  /// metodo refreshData per aggiornare la lista delle stories
+  void refreshData() {
+    // setState
+    setState(() {
+      ///
+      storyModelFuture = downloadStoryData();
+    });
+  }
+
   // override del metodo build
   @override
   Widget build(BuildContext context) {
@@ -96,9 +105,20 @@ class _HomePageState extends State<HomePage> {
           // style di Text
           style: TextStyle(color: Colors.black),
         ),
-        // Title al centro (AppBar)
+
+        actions: [
+          IconButton(
+            // onPressed per il refresh
+            onPressed: refreshData,
+            // icona di refresh
+            icon: Icon(Icons.refresh),
+          ),
+        ],
+
+        /// Title al centro (AppBar)
         centerTitle: true,
-        // colore di sfondo (AppBar)
+
+        /// colore di sfondo (AppBar)
         backgroundColor: Colors.white,
       ),
 
