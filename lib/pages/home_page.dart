@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hacker_news_api/pages/partials/loading_page.dart';
 // import libreria http + alias
 import 'package:http/http.dart' as http;
 // import dart convert
@@ -154,18 +155,8 @@ class _HomePageState extends State<HomePage> {
     builder: (context, snapshot) {
       /// se questa future non è stata ancora risolta
       if (snapshot.connectionState != ConnectionState.done) {
-        // caricamento/loading
-        return Container(
-          // colore di sfondo (Container)
-          color: Colors.white,
-          // allineamento del Container
-          alignment: Alignment.center,
-          // child di Container
-          child: CircularProgressIndicator(
-            // colore della CircularProgressIndicator
-            color: Colors.black,
-          ),
-        );
+        // ritorna la pagina di caricamento/loading
+        return LoadingPage();
       } else {
         // ritorna un Container
         return Container(
