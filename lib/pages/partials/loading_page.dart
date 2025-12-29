@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-/// TO DO
+/// classe LoadingPage
+/// per il caricamento/loading delle news
 class LoadingPage extends StatelessWidget {
+  /// costruttore
   const LoadingPage({super.key});
 
-  /// TO DO
+  /// override del metodo build
   @override
   Widget build(BuildContext context) {
     return Container(

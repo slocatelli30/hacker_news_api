@@ -13,7 +13,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      /// home
+      /// home con istanza di HomePage
       home: HomePage(),
 
       /// rimuovere banner di debug
