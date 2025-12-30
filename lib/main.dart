@@ -9,10 +9,13 @@ void main() {
 
 /// classe App
 class App extends StatelessWidget {
+  /// TO DO - ???
+  const App({super.key});
+
   /// override del metodo build
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       /// home con istanza di HomePage
       home: HomePage(),
 

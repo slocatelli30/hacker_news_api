@@ -107,7 +107,8 @@ class _HomePageState extends State<HomePage> {
             ),
 
             /// separatorBuilder
-            separatorBuilder: (context, index) => Divider(color: Colors.white),
+            separatorBuilder: (context, index) =>
+                Divider(color: Colors.grey.shade300),
           ),
         );
       }
