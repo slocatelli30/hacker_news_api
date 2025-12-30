@@ -74,44 +74,100 @@ class _HomePageState extends State<HomePage> {
     future: storyModelFuture,
     // builder
     builder: (context, snapshot) {
-      /// se questa future non è stata ancora risolta
-      if (snapshot.connectionState != ConnectionState.done) {
+      /// 1. Loading
+      if (snapshot.connectionState == ConnectionState.waiting) {
         // ritorna la pagina di caricamento/loading
-        return LoadingPage();
-      } else {
-        // ritorna un Container
-        return Container(
-          /// colore Container
-          color: Colors.white,
+        return const LoadingPage();
+      }
 
-          /// child: ListView (variante separated)
-          child: ListView.separated(
-            /// itemCount
-            itemCount: snapshot.data!.length,
-
-            /// itemBuilder
-            itemBuilder: (context, index) => ListTile(
-              /// title (titolo)
-              title: Text(
-                snapshot.data![index].title,
-                style: TextStyle(fontWeight: FontWeight.bold),
+      /// 2. Error
+      if (snapshot.hasError) {
+        return Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Si è verificato un errore nel caricamento"),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                onPressed: refreshData,
+                child: const Text("Riprova"),
               ),
-
-              /// subtitle (autore)
-              subtitle: Text(
-                // autore
-                snapshot.data![index].author,
-                // stile di Text per autore
-                style: TextStyle(fontStyle: FontStyle.italic),
-              ),
-            ),
-
-            /// separatorBuilder
-            separatorBuilder: (context, index) =>
-                Divider(color: Colors.grey.shade300),
+            ],
           ),
         );
       }
+
+      /// 3. No data (null)
+      /// Da qui in poi, si utilizza "stories"
+      /// evitando così "snapshot.data!" perché
+      /// "pericoloso"
+      final stories = snapshot.data;
+      if (stories == null) {
+        return Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Nessun dato disponibile"),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                onPressed: refreshData,
+                child: const Text("Ricarica"),
+              ),
+            ],
+          ),
+        );
+      }
+
+      /// 4. Empty list
+      if (stories.isEmpty) {
+        return Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("Nessuna news trovata"),
+              const SizedBox(height: 12),
+              ElevatedButton(
+                onPressed: refreshData,
+                child: const Text("Aggiorna"),
+              ),
+            ],
+          ),
+        );
+      }
+
+      /// 5. Success (tutto ok)
+      // ritorna un Container
+      return Container(
+        /// colore Container
+        color: Colors.white,
+
+        /// child: ListView (variante separated)
+        child: ListView.separated(
+          /// itemCount
+          itemCount: stories.length,
+
+          /// itemBuilder
+          itemBuilder: (context, index) => ListTile(
+            /// title (titolo)
+            title: Text(
+              stories[index].title,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+            /// subtitle (autore)
+            subtitle: Text(
+              // autore
+              stories[index].author,
+              // stile di Text per autore
+              style: const TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ),
+
+          /// separatorBuilder
+          separatorBuilder: (context, index) =>
+              Divider(color: Colors.grey.shade300),
+        ),
+      );
     },
   );
 }
