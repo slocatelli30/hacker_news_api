@@ -21,33 +21,28 @@ class _HomePageState extends State<HomePage> {
   /// qualcosa è un'istanza di StoryModel
   late Future<List<StoryModel>> storyModelFuture;
 
-  /// TO DO - a cosa serve
-  /// _service ???
-  final service = HackerNewsService();
+  /// "service" variabile privata che contiene
+  /// un'istanza di "HackerNewsService"
+  /// e sarà utilizzata per invocare
+  /// i metodi di quella classe
+  final _service = HackerNewsService();
 
-  /// numero di topStories da prendere
-  final int firstTopStories = 15;
-
-  // override del metodo initState
+  /// override del metodo initState
   @override
   void initState() {
     // super initState
     super.initState();
 
-    /// inizializzazione di storyModelFuture
-    storyModelFuture = service.downloadStoryData(
-      firstTopStories: firstTopStories,
-    );
+    /// prima inizializzazione di storyModelFuture
+    storyModelFuture = _service.downloadStoryData();
   }
 
   /// metodo refreshData per aggiornare la lista delle stories
   void refreshData() {
     // setState
     setState(() {
-      /// TO DO
-      storyModelFuture = service.downloadStoryData(
-        firstTopStories: firstTopStories,
-      );
+      /// refresh manuale di storyModelFuture
+      storyModelFuture = _service.downloadStoryData();
     });
   }
 

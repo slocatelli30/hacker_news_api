@@ -7,7 +7,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// e non restituisce nulla, ma può essere null (opzionale).
   /// La variabile "onRefresh" è una callback,
   /// cioè una funzione che verrà eseguita
-  /// quando l'utente preme il pulsante di refresh sulla AppBar
+  /// quando l'utente preme il pulsante di refresh sull'AppBar
   final VoidCallback? onRefresh;
 
   /// costruttore + parametri

@@ -6,13 +6,16 @@ import 'package:hacker_news_api/models/story_model.dart';
 
 /// classe HackerNewsService
 /// contenente la logica HTTP/JSON,
-/// logica applicativa/interfacciamento esterno
+/// logica applicativa/interfacciamento esterno.
+/// Questa classe gestisce la logica per interfacciarsi
+/// con il servizio esterno, come la chiamata HTTP
+/// per recuperare i dati da Hacker News
 class HackerNewsService {
+  /// numero di topStories da prendere
+  final int _firstTopStories = 15;
+
   /// metodo downloadStoryData
-  Future<List<StoryModel>> downloadStoryData({
-    // firstTopStories (parametro richiesto)
-    required int firstTopStories,
-  }) async {
+  Future<List<StoryModel>> downloadStoryData() async {
     /// chiamata http per prendere le topstories
     final topStoriesHttpResponse = await http.get(
       Uri.parse(
@@ -27,7 +30,7 @@ class HackerNewsService {
 
     /// ciascuno di questi id viene mappato
     /// (si prendono solamente le prime firstTopStories)
-    final topStoriesFutures = topStoriesIds.take(firstTopStories).map((
+    final topStoriesFutures = topStoriesIds.take(_firstTopStories).map((
       storyId,
     ) async {
       /// si deve iterare/ciclare per ciascun id/elemento
