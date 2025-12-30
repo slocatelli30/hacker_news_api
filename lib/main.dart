@@ -9,7 +9,7 @@ void main() {
 
 /// classe App
 class App extends StatelessWidget {
-  /// TO DO - ???
+  /// TO DO - DA CHIEDERE A COSA SERVE
   const App({super.key});
 
   /// override del metodo build

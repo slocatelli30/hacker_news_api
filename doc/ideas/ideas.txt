@@ -10,6 +10,9 @@ invece che fisso nel service (più riusabilità):
 - o nel costruttore (HackerNewsService(firstTopStories: 15))
 - o come parametro del metodo (downloadStoryData({required int limit}))
 
+Refactoring del codice in "home_page.dart": dentro gli if la logica 
+Center - Column - Text - SizedBox è sempre uguale
+
 ****************************** IDEE DI PROGETTO ******************************
 Per ogni articolo, permettere all'utente di fare click su di esso 
 e visualizzare il titolo e la descrizione. 
