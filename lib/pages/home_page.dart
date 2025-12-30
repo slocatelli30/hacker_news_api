@@ -34,6 +34,12 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     /// prima inizializzazione di storyModelFuture
+    _loadStories();
+  }
+
+  /// _loadStories
+  /// metodo privato per il download delle stories
+  void _loadStories() {
     storyModelFuture = _service.downloadStoryData();
   }
 
@@ -42,7 +48,7 @@ class _HomePageState extends State<HomePage> {
     // setState
     setState(() {
       /// refresh manuale di storyModelFuture
-      storyModelFuture = _service.downloadStoryData();
+      _loadStories();
     });
   }
 
