@@ -4,12 +4,12 @@ import 'package:hacker_news_api/pages/home_page.dart';
 /// main
 void main() {
   /// runApp
-  runApp(App());
+  runApp(const App());
 }
 
 /// classe App
 class App extends StatelessWidget {
-  /// TO DO - DA CHIEDERE A COSA SERVE
+  /// costruttore
   const App({super.key});
 
   /// override del metodo build
