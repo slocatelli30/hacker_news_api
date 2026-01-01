@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hacker_news_api/pages/partials/custom_app_bar.dart';
+import 'package:hacker_news_api/pages/partials/error_info_page.dart';
 import 'package:hacker_news_api/pages/partials/loading_page.dart';
 // import story_model.dart
 import 'package:hacker_news_api/models/story_model.dart';
@@ -65,6 +66,9 @@ class _HomePageState extends State<HomePage> {
         /// child
         child: body(),
       ),
+
+      // colore di sfondo (Scaffold)
+      backgroundColor: Colors.white,
     );
   }
 
@@ -82,18 +86,10 @@ class _HomePageState extends State<HomePage> {
 
       /// 2. Error
       if (snapshot.hasError) {
-        return Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Si è verificato un errore nel caricamento"),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: refreshData,
-                child: const Text("Riprova"),
-              ),
-            ],
-          ),
+        return ErrorInfoPage(
+          infoText: "Si è verificato un errore nel caricamento",
+          buttonText: "Riprova",
+          onRefresh: refreshData,
         );
       }
 
@@ -103,35 +99,19 @@ class _HomePageState extends State<HomePage> {
       /// "pericoloso"
       final stories = snapshot.data;
       if (stories == null) {
-        return Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Nessun dato disponibile"),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: refreshData,
-                child: const Text("Ricarica"),
-              ),
-            ],
-          ),
+        return ErrorInfoPage(
+          infoText: "Nessun dato disponibile",
+          buttonText: "Ricarica",
+          onRefresh: refreshData,
         );
       }
 
       /// 4. Empty list
       if (stories.isEmpty) {
-        return Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Text("Nessuna news trovata"),
-              const SizedBox(height: 12),
-              ElevatedButton(
-                onPressed: refreshData,
-                child: const Text("Aggiorna"),
-              ),
-            ],
-          ),
+        return ErrorInfoPage(
+          infoText: "Nessuna news trovata",
+          buttonText: "Aggiorna",
+          onRefresh: refreshData,
         );
       }
 

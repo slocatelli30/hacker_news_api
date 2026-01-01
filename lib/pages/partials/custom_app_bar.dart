@@ -46,6 +46,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       /// actions
       actions: [
         IconButton(
+          // colori IB
+          splashColor: Colors.green,
+
           /// onPressed per il refresh.
           /// Callback passata dall'esterno.
           /// La AppBar rimane "stupida" non conoscendo
