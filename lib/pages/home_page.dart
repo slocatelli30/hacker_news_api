@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
       /// 2. Error
       if (snapshot.hasError) {
         return ErrorInfoPage(
-          infoText: "Si è verificato un errore nel caricamento",
+          infoText: "Errore nel caricamento",
           buttonText: "Riprova",
           onRefresh: refreshData,
         );
