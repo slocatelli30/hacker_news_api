@@ -49,6 +49,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           // colori IB
           splashColor: Colors.green,
 
+          /// questo per far funzionare lo splashColor
+          /// anche su Web
+          style: ButtonStyle(
+            overlayColor: MaterialStateProperty.all(
+              Colors.green.withOpacity(0.3),
+            ),
+          ),
+
           /// onPressed per il refresh.
           /// Callback passata dall'esterno.
           /// La AppBar rimane "stupida" non conoscendo
