@@ -28,6 +28,9 @@ class _HomePageState extends State<HomePage> {
   /// i metodi di quella classe
   final _service = HackerNewsService();
 
+  /// TO DO
+  bool _isRefreshing = false;
+
   /// override del metodo initState
   @override
   void initState() {
@@ -45,12 +48,28 @@ class _HomePageState extends State<HomePage> {
   }
 
   /// metodo refreshData per aggiornare la lista delle stories
-  void refreshData() {
+  Future<void> refreshData() async {
+    /// TO DO
+    _isRefreshing = true;
+
     // setState
     setState(() {
       /// refresh manuale di storyModelFuture
       _loadStories();
     });
+
+    /// Aspetto che il FutureBuilder riceva
+    /// il nuovo future e lo completi.
+    /// Per far sì che l'animazione del RefreshIndicator
+    /// rimanga finché il download non finisce
+    try {
+      await storyModelFuture;
+    } catch (_) {
+      // ignora: il FutureBuilder gestirà snapshot.hasError
+      // TO DO - EVENTUALE TIMEOUT DA QUALCHE PARTE?
+    } finally {
+      _isRefreshing = false;
+    }
   }
 
   // override del metodo build
@@ -79,7 +98,9 @@ class _HomePageState extends State<HomePage> {
     // builder
     builder: (context, snapshot) {
       /// 1. Loading
-      if (snapshot.connectionState == ConnectionState.waiting) {
+      /// TO DO - PER AGGIUNTA MODIFICA
+      if (snapshot.connectionState == ConnectionState.waiting &&
+          !_isRefreshing) {
         // ritorna la pagina di caricamento/loading
         return const LoadingPage();
       }
@@ -117,12 +138,21 @@ class _HomePageState extends State<HomePage> {
 
       /// 5. Success (tutto ok)
       // ritorna un Container
-      return Container(
-        /// colore Container
+      return RefreshIndicator(
+        /// TO DO
+        onRefresh: refreshData,
+
+        /// colore della freccia/spinner
         color: Colors.white,
+
+        /// colore di sfondo del cerchio
+        backgroundColor: Colors.green,
 
         /// child: ListView (variante separated)
         child: ListView.separated(
+          /// TO DO
+          physics: const AlwaysScrollableScrollPhysics(),
+
           /// itemCount
           itemCount: stories.length,
 
@@ -144,6 +174,7 @@ class _HomePageState extends State<HomePage> {
           ),
 
           /// separatorBuilder
+          /// divisore tra una news e l'altra
           separatorBuilder: (context, index) =>
               Divider(color: Colors.grey.shade300),
         ),
