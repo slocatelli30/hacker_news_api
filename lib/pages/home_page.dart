@@ -76,8 +76,8 @@ class _HomePageState extends State<HomePage> {
       /// così l'animazione dura esattamente quanto il download
       await storyModelFuture;
     } catch (_) {
-      // ignora: il FutureBuilder gestirà snapshot.hasError
-      // TO DO - EVENTUALE TIMEOUT DA QUALCHE PARTE?
+      /// ignora: il FutureBuilder gestirà snapshot.hasError
+      /// eventuale timeout va gestito nel service
     } finally {
       /// il refresh manuale è terminato,
       /// in qualsiasi caso

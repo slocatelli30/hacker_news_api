@@ -14,6 +14,8 @@ Refactoring del codice in "home_page.dart":
 nei costruttori, introdurre anche il colore scelto in base al caso d'uso.
 Esempio: Error -> rosso, No data (null) -> arancione, Empty list -> arancione
 
+Timeout nel service.
+
 ****************************** IDEE DI PROGETTO ******************************
 Per ogni articolo, permettere all'utente di fare click su di esso 
 e visualizzare il titolo e la descrizione. 
