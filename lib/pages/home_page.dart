@@ -28,7 +28,14 @@ class _HomePageState extends State<HomePage> {
   /// i metodi di quella classe
   final _service = HackerNewsService();
 
-  /// TO DO
+  /// flag logico.
+  /// variabile di stato che serve a distinguere
+  /// due situazioni diverse
+  /// - refresh manuale (pull-to-refresh o tap su refresh)
+  /// - primo caricamento della pagina
+  /// Valori:
+  /// - false -> no refresh manuale
+  /// - true -> è in corso un refresh manuale
   bool _isRefreshing = false;
 
   /// override del metodo initState
@@ -49,7 +56,10 @@ class _HomePageState extends State<HomePage> {
 
   /// metodo refreshData per aggiornare la lista delle stories
   Future<void> refreshData() async {
-    /// TO DO
+    /// da questo momento sto facendo un
+    /// refresh manuale e succede quando:
+    /// - l'utente tira giù la lista (RefreshIndicator)
+    /// - (oppure) preme il pulsante di refresh nella AppBar
     _isRefreshing = true;
 
     // setState
@@ -63,11 +73,14 @@ class _HomePageState extends State<HomePage> {
     /// Per far sì che l'animazione del RefreshIndicator
     /// rimanga finché il download non finisce
     try {
+      /// così l'animazione dura esattamente quanto il download
       await storyModelFuture;
     } catch (_) {
       // ignora: il FutureBuilder gestirà snapshot.hasError
       // TO DO - EVENTUALE TIMEOUT DA QUALCHE PARTE?
     } finally {
+      /// il refresh manuale è terminato,
+      /// in qualsiasi caso
       _isRefreshing = false;
     }
   }
@@ -98,7 +111,11 @@ class _HomePageState extends State<HomePage> {
     // builder
     builder: (context, snapshot) {
       /// 1. Loading
-      /// TO DO - PER AGGIUNTA MODIFICA
+      /// Si sta dicendo alla UI di
+      /// mostrare la pagina di loading SOLO se:
+      /// - il Future è in waiting
+      /// - NON stai facendo un refresh manuale
+      /// ("!_isRefreshing")
       if (snapshot.connectionState == ConnectionState.waiting &&
           !_isRefreshing) {
         // ritorna la pagina di caricamento/loading
@@ -137,9 +154,12 @@ class _HomePageState extends State<HomePage> {
       }
 
       /// 5. Success (tutto ok)
-      // ritorna un Container
+      /// Regola fondamentale del RefreshIndicator:
+      /// - "onRefresh" DEVE restituire un Future<void>
+      /// - lo spinner resta visibile finché il Future non termina
       return RefreshIndicator(
-        /// TO DO
+        /// Collegamento tra il gesto dell'utente
+        /// (pull-down) e il metodo refreshData()
         onRefresh: refreshData,
 
         /// colore della freccia/spinner
@@ -150,7 +170,8 @@ class _HomePageState extends State<HomePage> {
 
         /// child: ListView (variante separated)
         child: ListView.separated(
-          /// TO DO
+          /// la lista deve essere scrollabile anche se
+          /// il contenuto non riempie lo schermo
           physics: const AlwaysScrollableScrollPhysics(),
 
           /// itemCount
