@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hacker_news_api/components/info_snack_bar.dart';
 import 'package:hacker_news_api/pages/partials/custom_app_bar.dart';
 import 'package:hacker_news_api/pages/partials/error_info_page.dart';
 import 'package:hacker_news_api/pages/partials/loading_page.dart';
@@ -7,6 +8,9 @@ import 'package:hacker_news_api/models/story_model.dart';
 import 'package:hacker_news_api/services/hacker_news_service.dart';
 
 /// classe HomePage
+/// Widget di alto livello che coordina lo stato,
+/// la logica di caricamento dati e la composizione
+/// dei componenti grafici della HomePage
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -75,9 +79,43 @@ class _HomePageState extends State<HomePage> {
     try {
       /// così l'animazione dura esattamente quanto il download
       await storyModelFuture;
+
+      /// Se questo State non è più montato,
+      /// esci immediatamente dal metodo,
+      /// così da evitare crash
+      if (!mounted) return;
+
+      /// Mostrare la SnackBar personalizzata
+      InfoSnackBar.show(
+        // context
+        context,
+        // messaggio
+        message: "Lista aggiornata correttamente",
+        // tipo di messaggio
+        type: InfoType.success,
+        // durata
+        duration: Duration(seconds: 2),
+      );
     } catch (_) {
       /// ignora: il FutureBuilder gestirà snapshot.hasError
       /// eventuale timeout va gestito nel service
+
+      /// Se questo State non è più montato,
+      /// esci immediatamente dal metodo,
+      /// così da evitare crash
+      if (!mounted) return;
+
+      /// Mostrare la SnackBar personalizzata
+      InfoSnackBar.show(
+        // context
+        context,
+        // messaggio
+        message: "Errore durante l'aggiornamento",
+        // tipo di messaggio
+        type: InfoType.error,
+        // durata
+        duration: Duration(seconds: 2),
+      );
     } finally {
       /// il refresh manuale è terminato,
       /// in qualsiasi caso

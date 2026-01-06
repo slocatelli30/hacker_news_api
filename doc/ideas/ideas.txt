@@ -16,6 +16,13 @@ Esempio: Error -> rosso, No data (null) -> arancione, Empty list -> arancione
 
 Timeout nel service.
 
+Pensare a come evitare doppi refresh nel file "home_page.dart".
+In teoria nel metodo "refreshData" inserire da qualche parte:
+"if(_loading) return; // evita doppi refresh"
+
+Chiedere a ChatGPT come trasformare la tua HomePage in una MVVM pulita
+oppure simulare come verrebbe reviewato questo codice in un team reale
+
 ****************************** IDEE DI PROGETTO ******************************
 Per ogni articolo, permettere all'utente di fare click su di esso 
 e visualizzare il titolo e la descrizione. 

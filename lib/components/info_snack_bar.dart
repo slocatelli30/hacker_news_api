@@ -1,107 +1,136 @@
 import 'package:flutter/material.dart';
 
-/// enumerativi
-/// TO DO - a cosa servono?
-/// TO DO - dato che sono generali, vanno bene qui o meglio altrove?
+/// Enumerativi InfoType.
+/// Servono a classificare la snackbar
+/// e a far dipendere da quella scelta
+/// (almeno) colore (e volendo anche icona,
+/// testo, ecc.)
 enum InfoType { success, error, info, warning }
 
-/// classe InfoSnackBar
-/// TO DO - descrizione per capire a cosa serve
-/// TO DO - passato il "type" come parametro
+/// classe InfoSnackBar.
+/// Utilizzato per la visualizzazione di SnackBar
+/// informative.
+/// Permette di mostrare messaggi di feedback
+/// all'utente specificando:
+/// - il testo del messaggio
+/// - la tipologia del messaggio (success, error, info, warning)
+/// - la durata di visualizzazione
+/// - un’eventuale azione associata (action label)
+/// Passato il "type" come parametro
 /// viene scelto di conseguenza il colore di
-/// background
+/// background.
+/// La tipologia del messaggio determina automaticamente lo stile
+/// della SnackBar (colore di sfondo e, se previsto, icona)
 class InfoSnackBar {
-  /// TO DO - descrizione
-  static SnackBar show(
-    // TO DO - SPIEGARE
+  /// metodo statico "show".
+  /// La classe "InfoSnackBar" è progettata come utility stateless;
+  /// per questo motivo il metodo "show" è statico
+  /// e può essere invocato senza istanziare la classe,
+  /// evitando la gestione di stato non necessario
+  static void show(
+    /// riferimento alla posizione di un widget
+    /// all'interno dell'albero dei widget di Flutter
     BuildContext context, {
-    // TO DO
+    // messaggio informativo
     required String message,
-    // TO DO
+    // tipologia di messaggio informativo
     required InfoType type,
-    // TO DO
+    // action label
     String? actionLabel,
-    // TO DO
+    // durata
     required Duration duration,
   }) {
+    /// Recuperare lo "ScaffoldMessenger" associato
+    /// allo schermo corrente
+    final messenger = ScaffoldMessenger.of(context);
+
     /// Evitare "stack" di snackbar:
-    /// ne mostri una per volta
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    /// ne mostri una per volta.
+    /// Previene la sovrapposizione
+    /// o l'accodamento automatico,
+    /// garantendo una sola SnackBar
+    /// visibile per volta
+    messenger.hideCurrentSnackBar();
 
-    return SnackBar(
-      /// content (SnackBar)
-      content: Text(
-        // messaggio/avviso
-        message,
-        // stile
-        style: TextStyle(
-          // colore del messaggio avviso
-          color: Colors.white,
-          // grassetto
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-
-      /// action (SnackBar)
-      action: (actionLabel != null)
-          ? SnackBarAction(label: actionLabel, onPressed: () {})
-          : null,
-
-      /// backgroundColor
-      backgroundColor: _backgroundColor(type),
-
-      /// posizionamento SnackBar
-      behavior: SnackBarBehavior.floating,
-
-      /// durata SnackBar
-      /// decisa nel passaggio di parametri
-      duration: duration,
-
-      /// per definire la forma del bordo
-      shape:
-          /// tipo specifico di forma
-          /// per creare bordi arrotondati
-          RoundedRectangleBorder(
-            /// definisce il raggio di arrotondamento
-            /// di tutti e quattro gli angoli
-            borderRadius: BorderRadius.circular(15),
+    /// ritorna una SnackBar
+    messenger.showSnackBar(
+      SnackBar(
+        /// content (SnackBar)
+        content: Text(
+          // messaggio/avviso
+          message,
+          // stile
+          style: TextStyle(
+            // colore del messaggio avviso
+            color: Colors.white,
+            // grassetto
+            fontWeight: FontWeight.bold,
           ),
+        ),
+
+        /// action (SnackBar)
+        action: (actionLabel != null)
+            ? SnackBarAction(label: actionLabel, onPressed: () {})
+            : null,
+
+        /// backgroundColor
+        backgroundColor: _backgroundColor(type),
+
+        /// posizionamento SnackBar
+        behavior: SnackBarBehavior.floating,
+
+        /// durata SnackBar
+        /// decisa nel passaggio di parametri
+        duration: duration,
+
+        /// per definire la forma del bordo
+        shape:
+            /// tipo specifico di forma
+            /// per creare bordi arrotondati
+            RoundedRectangleBorder(
+              /// definisce il raggio di arrotondamento
+              /// di tutti e quattro gli angoli
+              borderRadius: BorderRadius.circular(15),
+            ),
+      ),
     );
   }
 
   /// _backgroundColor
-  /// TO DO - descrizione e a cosa serve
+  /// Restituisce il colore di sfondo della SnackBar
+  /// in base alla tipologia di messaggio ("InfoType")
   static Color _backgroundColor(InfoType type) {
     switch (type) {
-      /// successo
+      /// successo (verde scuro/green)
       case InfoType.success:
-        // verde scuro - TO DO - da modificare eventualmente
+        // return Colors.green
         return const Color(0xFF2E7D32);
 
-      /// errore
+      /// errore (rosso/red)
       case InfoType.error:
-        // rosso scuro - TO DO - da modificare eventualmente
+        // return Colors.red;
         return const Color(0xFFC62828);
 
-      /// warning
+      /// warning (arancione/orange)
       case InfoType.warning:
-        // arancio - TO DO - da modificare eventualmente
+        // return Colors.orange;
         return const Color(0xFFED6C02);
 
-      /// info
+      /// info (blu/blue)
       case InfoType.info:
-        // blu - TO DO - da modificare eventualmente
+        // return Colors.blue;
         return const Color(0xFF1565C0);
 
-      /// default
+      /// default (grigio/grey)
       default:
-        // grigio - TO DO - da modificare eventualmente
+        // return Colors.grey;
         return const Color(0xFF9E9E9E);
     }
   }
 
-  /// _icon
-  /// TO DO - descrizione e a cosa serve
+  /// _icon (metodo statico non utilizzato/mai richiamato)
+  /// Restituisce l'icona associata alla SnackBar
+  /// in base alla tipologia di messaggio ("InfoType")
   static IconData _icon(InfoType type) {
     switch (type) {
       /// success
