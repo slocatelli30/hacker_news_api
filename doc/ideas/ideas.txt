@@ -23,6 +23,15 @@ In teoria nel metodo "refreshData" inserire da qualche parte:
 Chiedere a ChatGPT come trasformare la tua HomePage in una MVVM pulita
 oppure simulare come verrebbe reviewato questo codice in un team reale
 
+Se durante il refresh c'è un errore:
+- non "rompi" la UI (resta la lista precedente)
+- e la SnackBar segnala l'errore
+Quindi: aggiungere una variabile "_storiesCache" che conserva 
+l'ultima lista valida mostrata. Durante il refresh aggiorno il 
+future, ma la UI continua a mostrare la cache finché non arrivano 
+i nuovi dati e la SnackBar viene visualizzata solamente al termine 
+del refresh
+
 ****************************** IDEE DI PROGETTO ******************************
 Per ogni articolo, permettere all'utente di fare click su di esso 
 e visualizzare il titolo e la descrizione. 
