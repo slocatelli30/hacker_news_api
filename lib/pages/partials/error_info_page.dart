@@ -52,7 +52,7 @@ class ErrorInfoPage extends StatelessWidget {
             onPressed: onRefresh,
             // icona di refresh
             icon: Icon(Icons.refresh_rounded),
-            // stile di EB
+            // stile di IB
             style: IconButton.styleFrom(
               foregroundColor: Colors.white,
               backgroundColor: Colors.green,
