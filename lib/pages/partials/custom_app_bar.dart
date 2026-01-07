@@ -45,6 +45,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
       /// actions
       actions: [
+        /// IB per il refresh
         IconButton(
           // colori IB
           splashColor: Colors.green,
