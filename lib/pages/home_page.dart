@@ -32,15 +32,9 @@ class _HomePageState extends State<HomePage> {
   /// i metodi di quella classe
   final _service = HackerNewsService();
 
-  /// flag logico.
-  /// variabile di stato che serve a distinguere
-  /// due situazioni diverse
-  /// - refresh manuale (pull-to-refresh o tap su refresh)
-  /// - primo caricamento della pagina
-  /// Valori:
-  /// - false -> no refresh manuale
-  /// - true -> è in corso un refresh manuale
-  bool _isRefreshing = false;
+  /// Cache dell’ultima lista valida mostrata.
+  /// Se non è null, NON mostriamo mai LoadingPage durante refresh.
+  List<StoryModel>? _storiesCache;
 
   /// override del metodo initState
   @override
@@ -48,44 +42,46 @@ class _HomePageState extends State<HomePage> {
     // super initState
     super.initState();
 
-    /// prima inizializzazione di storyModelFuture
-    _loadStories();
-  }
-
-  /// _loadStories
-  /// metodo privato per il download delle stories
-  void _loadStories() {
+    // download delle stories
     storyModelFuture = _service.downloadStoryData();
   }
 
   /// metodo refreshData per aggiornare la lista delle stories
   Future<void> refreshData() async {
-    /// da questo momento sto facendo un
-    /// refresh manuale e succede quando:
-    /// - l'utente tira giù la lista (RefreshIndicator)
-    /// - (oppure) preme il pulsante di refresh nella AppBar
-    _isRefreshing = true;
-
-    // setState
+    /// setState
+    /// Scateno un nuovo Future per il FutureBuilder
+    /// (senza cambiare UI in loading)
     setState(() {
       /// refresh manuale di storyModelFuture
-      _loadStories();
+      storyModelFuture = _service.downloadStoryData();
     });
 
-    /// Aspetto che il FutureBuilder riceva
-    /// il nuovo future e lo completi.
-    /// Per far sì che l'animazione del RefreshIndicator
-    /// rimanga finché il download non finisce
+    /// Aspetto il risultato per:
+    /// - far durare lo spinner del RefreshIndicator
+    /// quanto il download
+    /// - mostrare SnackBar a fine refresh
     try {
-      /// così l'animazione dura esattamente quanto il download
-      await storyModelFuture;
+      /// Aspetto che il FutureBuilder riceva
+      /// il nuovo future e lo completi, così
+      /// che l'animazione del RefreshIndicator
+      /// rimanga finché il download non finisce.
+      /// In questo modo l'animazione dura
+      /// esattamente quanto il download
+      final freshStories = await storyModelFuture;
 
       /// Se questo State non è più montato,
       /// esci immediatamente dal metodo,
       /// così da evitare crash
       if (!mounted) return;
 
+      /// Aggiorno la cache solo se ho dati validi
+      setState(() {
+        _storiesCache = freshStories;
+      });
+
       /// Mostrare la SnackBar personalizzata
+      /// SOLO su refresh manuale
+      /// (AppBar o pull-to-refresh)
       InfoSnackBar.show(
         // context
         context,
@@ -106,6 +102,7 @@ class _HomePageState extends State<HomePage> {
       if (!mounted) return;
 
       /// Mostrare la SnackBar personalizzata
+      /// se fallisce il refresh, mantenendo la lista precedente
       InfoSnackBar.show(
         // context
         context,
@@ -116,10 +113,6 @@ class _HomePageState extends State<HomePage> {
         // durata
         duration: Duration(seconds: 2),
       );
-    } finally {
-      /// il refresh manuale è terminato,
-      /// in qualsiasi caso
-      _isRefreshing = false;
     }
   }
 
@@ -148,20 +141,24 @@ class _HomePageState extends State<HomePage> {
     future: storyModelFuture,
     // builder
     builder: (context, snapshot) {
+      /// Se arrivano dati, aggiorno cache
+      /// (vale sia per primo load sia per refresh)
+      if (snapshot.hasData) {
+        _storiesCache = snapshot.data;
+      }
+
       /// 1. Loading
-      /// Si sta dicendo alla UI di
-      /// mostrare la pagina di loading SOLO se:
-      /// - il Future è in waiting
-      /// - NON stai facendo un refresh manuale
-      /// ("!_isRefreshing")
-      if (snapshot.connectionState == ConnectionState.waiting &&
-          !_isRefreshing) {
+      /// SOLO primo avvio: nessuna cache + waiting
+      if (_storiesCache == null &&
+          snapshot.connectionState == ConnectionState.waiting) {
         // ritorna la pagina di caricamento/loading
         return const LoadingPage();
       }
 
       /// 2. Error
-      if (snapshot.hasError) {
+      /// Se c'è errore al primo avvio (nessuna cache),
+      /// mostra pagina di errore
+      if (snapshot.hasError && _storiesCache == null) {
         return ErrorInfoPage(
           infoText: "Errore nel caricamento",
           buttonText: "Riprova",
@@ -169,11 +166,13 @@ class _HomePageState extends State<HomePage> {
         );
       }
 
+      /// Da qui in poi: ho cache
+      /// (oppure sono in una situazione "strana")
+      final stories = _storiesCache;
+
       /// 3. No data (null)
-      /// Da qui in poi, si utilizza "stories"
-      /// evitando così "snapshot.data!" perché
-      /// "pericoloso"
-      final stories = snapshot.data;
+      /// per sicurezza, in pratica non si dovrebbe quasi mai
+      /// arrivare qui
       if (stories == null) {
         return ErrorInfoPage(
           infoText: "Nessun dato disponibile",
@@ -192,10 +191,16 @@ class _HomePageState extends State<HomePage> {
       }
 
       /// 5. Success (tutto ok)
-      /// Regola fondamentale del RefreshIndicator:
-      /// - "onRefresh" DEVE restituire un Future<void>
-      /// - lo spinner resta visibile finché il Future non termina
+      /// Lista sempre visibile + pull-to-refresh
+      /// - Tap AppBar: nessuna LoadingPage, lista resta lì,
+      /// poi SnackBar
+      /// - Pull-to-refresh: spinner RefreshIndicator,
+      /// poi SnackBar
       return RefreshIndicator(
+        /// Regola fondamentale del RefreshIndicator:
+        /// - "onRefresh" DEVE restituire un Future<void>
+        /// - lo spinner resta visibile finché il Future non termina
+
         /// Collegamento tra il gesto dell'utente
         /// (pull-down) e il metodo refreshData()
         onRefresh: refreshData,
