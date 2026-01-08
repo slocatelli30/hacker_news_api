@@ -32,6 +32,9 @@ future, ma la UI continua a mostrare la cache finché non arrivano
 i nuovi dati e la SnackBar viene visualizzata solamente al termine 
 del refresh
 
+Piccola miglioria UX "da app reale": disabilitare/animare l’icona refresh 
+nell’AppBar mentre _refreshInProgress è true (senza pacchetti)
+
 ****************************** IDEE DI PROGETTO ******************************
 Per ogni articolo, permettere all'utente di fare click su di esso 
 e visualizzare il titolo e la descrizione. 

@@ -36,87 +36,165 @@ class _HomePageState extends State<HomePage> {
   /// Se non è null, NON mostriamo mai LoadingPage durante refresh.
   List<StoryModel>? _storiesCache;
 
+  /// variabile di stato che rappresenta
+  /// se c'è un refresh in corso o meno.
+  /// Inizializzata a "false", perché all'avvio
+  /// non c'è nessun refresh in corso.
+  /// Stato iniziale: non sto ricaricando nulla
+  bool _refreshInProgress = false;
+
   /// override del metodo initState
   @override
   void initState() {
     // super initState
     super.initState();
 
-    // download delle stories
-    storyModelFuture = _service.downloadStoryData();
+    /// Inizializzare i dati della pagina.
+    /// Serve sapere quando finisce il Future
+    /// per popolare la cache, senza mostrare SnackBar
+    _loadInitial();
   }
 
-  /// metodo refreshData per aggiornare la lista delle stories
+  /// Metodo che serve a caricare i dati al primo avvio
+  /// della pagina, mostrando il "LoadingPage", senza
+  /// SnackBar, e popolando la cache quando i dati arrivano.
+  /// Diverso dal refresh manuale perché:
+  /// - non deve mostrare feedback all'utente (SnackBar)
+  /// - deve solo "portare la pagina da vuota -> lista".
+  /// Qui non decido cosa mostrare ma preparo lo stato.
+  /// La UI reagisce leggendo quello stato.
+  /// Scopo: inizializzare i dati della pagina.
+  /// Avvia il caricamento iniziale, mostra il loading,
+  /// quando i dati arrivano aggiorna lo stato,
+  /// se fallisce lascia che la UI gestisca l'errore
+  void _loadInitial() {
+    /// Avvio del download
+    /// Avvio chiamata asincrona + salvo il Future nello stato
+    /// -> il FutureBuilder reagisce.
+    /// Avvio del Future
+    storyModelFuture = _service.downloadStoryData();
+
+    storyModelFuture
+        /// quando il Future va a buon fine,
+        /// aggiorno la cache e faccio rebuild.
+        /// ".then" = quando questo Future
+        /// si completa con successo, esegui questa funzione.
+        /// "stories" = risultato finale "List<StoryModel>".
+        /// Quando il Future termina...
+        .then((stories) {
+          /// se questa pagina non esiste più, non fare nulla
+          if (!mounted) return;
+
+          /// aggiornamento dello stato (cache) +
+          /// Flutter fa un rebuild della UI.
+          /// Aggiorna lo stato dell'applicazione...
+          setState(() {
+            _storiesCache = stories;
+          });
+        })
+        /// quando il Future fallisce,
+        /// non faccio nulla -> la UI gestisce l'errore.
+        /// Intercetta solo errori del Future, evita crash e
+        /// non mostra SnackBar
+        .catchError((Object e, StackTrace s) {
+          // Qui non serve SnackBar: il builder mostrerà ErrorInfoPage al primo avvio
+        });
+  }
+
+  /// Metodo che serve a gestire un refresh manuale
+  /// (tap sul bottone in AppBar o pull-to-refresh)
+  /// con questi obiettivi:
+  /// - evitare refresh multipli in parallelo (spam di tap/gesture)
+  /// - far partire una nuova richiesta al service
+  /// e aggiornare "storyModelFuture"
+  /// (così il "FutureBuilder" sa che c'è un nuovo caricamento)
+  /// - Aspettare il risultato della richiesta
+  /// (così il "RefreshIndicator" resta attivo
+  /// finché il download finisce)
+  /// - Se "successo": aggiornare la cache ("_storiesCache")
+  /// e mostrare relativa SnackBar
+  /// - Se "errore": mantenere la lista precedente (cache)
+  /// e mostrare relativa SnackBar
+  /// - Alla fine: sbloccare il refresh ("_refreshInProgress = false")
+  /// sempre, in ogni caso
   Future<void> refreshData() async {
-    /// setState
-    /// Scateno un nuovo Future per il FutureBuilder
-    /// (senza cambiare UI in loading)
+    /// Se un refresh è già in corso,
+    /// ignora nuovi refresh.
+    /// Evita richieste multiple in parallelo, SnackBar multiple
+    /// e race condition
+    if (_refreshInProgress) return;
+
+    /// altrimenti, se non è in corso,
+    /// ne avii uno.
+    /// Accetto un refresh solo se non
+    /// ce n'è già uno attivo.
+    /// Segno che "da adesso in poi" un refresh è attivo.
+    /// Qui non serve "setState", perché questa variabile
+    /// non cambia la UI (serve solo come lock logico)
+    _refreshInProgress = true;
+
+    /// future specifico di questo refresh.
+    /// final -> lo assegni una sola volta
+    /// late -> lo assegni dopo (dentro "setState")
+    late final Future<List<StoryModel>> future;
+
+    /// Questo blocco fa due cose sincronizzate:
+    /// - avvia la richiesta
+    /// - aggiorna la variabile osservata dal "FutureBuilder"
     setState(() {
-      /// refresh manuale di storyModelFuture
-      storyModelFuture = _service.downloadStoryData();
+      // avvio download/avvio richiesta
+      future = _service.downloadStoryData();
+      // notifica la UI
+      storyModelFuture = future;
     });
 
-    /// Aspetto il risultato per:
-    /// - far durare lo spinner del RefreshIndicator
-    /// quanto il download
-    /// - mostrare SnackBar a fine refresh
     try {
-      /// Aspetto che il FutureBuilder riceva
-      /// il nuovo future e lo completi, così
-      /// che l'animazione del RefreshIndicator
-      /// rimanga finché il download non finisce.
-      /// In questo modo l'animazione dura
-      /// esattamente quanto il download
-      final freshStories = await storyModelFuture;
+      /// "await future" fa sì che:
+      /// - il metodo non termina subito
+      /// - lo spinner del "RefreshIndicator" resta visibile
+      /// finché finisce il download
+      /// - evito che la funzione torni prima del tempo
+      final freshStories = await future;
 
-      /// Se questo State non è più montato,
-      /// esci immediatamente dal metodo,
-      /// così da evitare crash
+      /// se la pagina è stata chiusa nel frattempo,
+      /// non devo toccare lo stato né mostrare SnackBar
       if (!mounted) return;
 
-      /// Aggiorno la cache solo se ho dati validi
+      /// Qui aggiorno la "fonte di verità" della lista visibile.
+      /// Flutter rifà build -> lista aggiornata
       setState(() {
         _storiesCache = freshStories;
       });
 
-      /// Mostrare la SnackBar personalizzata
-      /// SOLO su refresh manuale
-      /// (AppBar o pull-to-refresh)
+      /// Feedback all'utente: refresh completato
       InfoSnackBar.show(
-        // context
         context,
-        // messaggio
         message: "Lista aggiornata correttamente",
-        // tipo di messaggio
         type: InfoType.success,
-        // durata
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
       );
     } catch (_) {
-      /// ignora: il FutureBuilder gestirà snapshot.hasError
-      /// eventuale timeout va gestito nel service
+      /// Se la richiesta fallisce, entri qui
 
-      /// Se questo State non è più montato,
-      /// esci immediatamente dal metodo,
-      /// così da evitare crash
+      /// Se la pagina non esiste più, non fare nulla
       if (!mounted) return;
 
-      /// Mostrare la SnackBar personalizzata
-      /// se fallisce il refresh, mantenendo la lista precedente
+      /// Mostrare messaggio di errore ma non si tocca la cache.
+      /// Risultato UX: l'utente resta con la lista vecchia
+      /// (se c'era) e sa che il refresh non è andato a buon fine
       InfoSnackBar.show(
-        // context
         context,
-        // messaggio
         message: "Errore durante l'aggiornamento",
-        // tipo di messaggio
         type: InfoType.error,
-        // durata
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
       );
+    } finally {
+      /// Sbloccare sempre (fondamentale)
+      _refreshInProgress = false;
     }
   }
 
-  // override del metodo build
+  /// override del metodo build
   @override
   Widget build(BuildContext context) {
     /// Scaffold
@@ -141,12 +219,6 @@ class _HomePageState extends State<HomePage> {
     future: storyModelFuture,
     // builder
     builder: (context, snapshot) {
-      /// Se arrivano dati, aggiorno cache
-      /// (vale sia per primo load sia per refresh)
-      if (snapshot.hasData) {
-        _storiesCache = snapshot.data;
-      }
-
       /// 1. Loading
       /// SOLO primo avvio: nessuna cache + waiting
       if (_storiesCache == null &&
