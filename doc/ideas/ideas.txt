@@ -55,6 +55,20 @@ ed infine (penso sempre nel README) una presentazione del progetto
 - HomePage: refresh + cache + mounted check
 - StoryModel.fromData: fallback su null
 
+Nel "main.dart": mettere almeno title + theme
+
+In "InfoSnackBar": l’action label ora non fa nulla
+
+In "HomePage": togliere Center(child: body()) e lasciare body: body()
+
+In "RefreshIndicator" ci sono colori hardcoded (meglio Theme)
+Ad esempio:
+    color: Theme.of(context).colorScheme.onPrimary,
+    backgroundColor: Theme.of(context).colorScheme.primary,
+
+Commenti troppo verbosi. Meglio inserire commenti inerenti al "perché"
+e non al "cosa"
+
 ****************************** IDEE DI PROGETTO ******************************
 Per ogni articolo, permettere all'utente di fare click su di esso 
 e visualizzare il titolo e la descrizione. 
