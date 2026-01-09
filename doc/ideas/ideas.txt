@@ -40,6 +40,21 @@ Ad esempio:
 - color: Theme.of(context).colorScheme.onPrimary
 - backgroundColor: Theme.of(context).colorScheme.primary
 
+All'interno della cartella GitHub, (penso nel README) mettere tutti 
+gli aspetti che questo progetto affronta. Ad esempio:
+- lavorare con async / Future / refresh
+- gestire stati UI reali
+- evitare bug comuni (mounted, refresh multipli)
+- separare UI / service / model
+- ragionare in termini di UX
+ed infine (penso sempre nel README) una presentazione del progetto
+(con anche alcuni screenshot)
+
+- Struttura semplice (pages/partials/services/models)
+- InfoSnackBar come utility
+- HomePage: refresh + cache + mounted check
+- StoryModel.fromData: fallback su null
+
 ****************************** IDEE DI PROGETTO ******************************
 Per ogni articolo, permettere all'utente di fare click su di esso 
 e visualizzare il titolo e la descrizione. 
