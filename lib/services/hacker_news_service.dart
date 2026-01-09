@@ -1,8 +1,12 @@
-// import libreria http + alias
+/// import libreria http + alias
 import 'package:http/http.dart' as http;
-// import dart convert
+
+/// import dart convert
 import 'dart:convert';
 import 'package:hacker_news_api/models/story_model.dart';
+
+/// per debugPrint
+import 'package:flutter/foundation.dart';
 
 /// classe HackerNewsService
 /// contenente la logica HTTP/JSON,
@@ -69,45 +73,76 @@ class HackerNewsService {
         .toList();
 
     /// Chiamate parallele per i dettagli delle stories
-    final futures = topStoriesIds.map((storyId) async {
+    final futures = topStoriesIds.map((int storyId) async {
       /// si deve iterare/ciclare per ciascun id/elemento
       /// e per ciascun id fare un'altra chiamata http
 
-      /// altra chiamata http per ciascun id, http.get
-      final response = await http
-          .get(
-            Uri.parse(
-              "https://hacker-news.firebaseio.com/v0/item/$storyId.json?print=pretty",
-            ),
-          )
-          .timeout(timeoutDuration);
-
-      /// Controllo status code item
-      if (response.statusCode != 200) {
-        throw Exception("Errore HTTP ${response.statusCode} su item $storyId");
-      }
-
-      /// Parsing JSON item
-      dynamic decodedItem;
       try {
-        decodedItem = json.decode(response.body);
-      } on FormatException catch (e) {
-        throw Exception("JSON non valido per item $storyId: $e");
-      }
+        /// altra chiamata http per ciascun id, http.get
+        final response = await http
+            .get(
+              Uri.parse(
+                "https://hacker-news.firebaseio.com/v0/item/$storyId.json?print=pretty",
+              ),
+            )
+            .timeout(timeoutDuration);
 
-      /// Evita crash quando: HackerNews restituisce null,
-      /// arriva payload non previsto, API cambia
-      if (decodedItem is! Map<String, dynamic>) {
-        throw Exception("Item $storyId non valido");
-      }
+        /// Controllo status code item
+        if (response.statusCode != 200) {
+          debugPrint(
+            "HackerNewsService: item $storyId "
+            "HTTP ${response.statusCode} "
+            "(${response.request?.url})",
+          );
+          return null;
+        }
 
-      /// ritorna un'istanza di StoryModel
-      /// invocando il metodo fromData
-      return StoryModel.fromData(decodedItem);
+        /// Parsing JSON item
+        dynamic decodedItem;
+        try {
+          decodedItem = json.decode(response.body);
+        } on FormatException catch (e) {
+          debugPrint(
+            'HackerNewsService: item $storyId '
+            'JSON non valido: $e ',
+          );
+          return null;
+        }
+
+        /// Distinguo il caso in cui "decodedItem" è null
+        if (decodedItem == null) {
+          debugPrint('HackerNewsService: item $storyId restituito null');
+          return null;
+        }
+
+        /// Evita crash quando: HackerNews restituisce null,
+        /// arriva payload non previsto, API cambia
+        if (decodedItem is! Map<String, dynamic>) {
+          debugPrint(
+            'HackerNewsService: item $storyId '
+            'payload non Map (${decodedItem.runtimeType})',
+          );
+          return null;
+        }
+
+        /// ritorna un'istanza di StoryModel
+        /// invocando il metodo fromData
+        return StoryModel.fromData(decodedItem);
+      } catch (e, s) {
+        debugPrint(
+          'HackerNewsService: item $storyId '
+          'errore inatteso: $e',
+        );
+        debugPrint(s.toString());
+        return null;
+      }
     }).toList();
 
     /// Attendo tutte le richieste
-    final stories = await Future.wait(futures);
+    final results = await Future.wait<StoryModel?>(futures);
+
+    /// Tengo solo quelle valide
+    final stories = results.whereType<StoryModel>().toList();
 
     // ritorno le stories
     return stories;
