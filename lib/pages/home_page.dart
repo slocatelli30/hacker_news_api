@@ -97,7 +97,14 @@ class _HomePageState extends State<HomePage> {
         /// Intercetta solo errori del Future, evita crash e
         /// non mostra SnackBar
         .catchError((Object e, StackTrace s) {
-          // Qui non serve SnackBar: il builder mostrerà ErrorInfoPage al primo avvio
+          /// Qui non serve SnackBar:
+          /// il builder mostrerà ErrorInfoPage al primo avvio
+
+          /// log del messaggio di errore
+          debugPrint("Errore in _loadInitial: $e");
+
+          /// log dello stack trace
+          debugPrint(s.toString());
         });
   }
 
