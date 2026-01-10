@@ -12,9 +12,10 @@ import 'package:hacker_news_api/services/hacker_news_service.dart';
 /// la logica di caricamento dati e la composizione
 /// dei componenti grafici della HomePage
 class HomePage extends StatefulWidget {
+  /// costruttore HomePage
   const HomePage({super.key});
 
-  // override del metodo createState
+  /// override del metodo createState
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -147,7 +148,12 @@ class _HomePageState extends State<HomePage> {
 
     /// Questo blocco fa due cose sincronizzate:
     /// - avvia la richiesta
-    /// - aggiorna la variabile osservata dal "FutureBuilder"
+    /// - aggiorna la variabile osservata dal "FutureBuilder".
+    /// Questo setState: è iniziato un refresh ->
+    /// aggiorno "storyModelFuture" -> "FutureBuilder" lo sa.
+    /// Notifico/avviso il "FutureBuilder" che è partito
+    /// un nuovo caricamento (stato di waiting, ...),
+    /// anche se poi non mostro il loading grazie alla cache
     setState(() {
       // avvio download/avvio richiesta
       future = _service.downloadStoryData();
@@ -168,7 +174,9 @@ class _HomePageState extends State<HomePage> {
       if (!mounted) return;
 
       /// Qui aggiorno la "fonte di verità" della lista visibile.
-      /// Flutter rifà build -> lista aggiornata
+      /// Flutter rifà build -> lista aggiornata.
+      /// Questo setState: "Sono arrivati i dati" ->
+      /// aggiorno "_storiesCache" -> ListView cambia
       setState(() {
         _storiesCache = freshStories;
       });
