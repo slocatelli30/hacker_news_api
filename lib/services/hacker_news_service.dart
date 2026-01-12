@@ -3,9 +3,11 @@ import 'package:http/http.dart' as http;
 
 /// import dart convert
 import 'dart:convert';
+
+/// import modello dati
 import 'package:hacker_news_api/models/story_model.dart';
 
-/// per debugPrint
+/// import per debugPrint
 import 'package:flutter/foundation.dart';
 
 /// classe HackerNewsService
