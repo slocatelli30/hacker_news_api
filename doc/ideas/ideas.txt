@@ -69,6 +69,8 @@ Ad esempio:
 Commenti troppo verbosi. Meglio inserire commenti inerenti al "perché"
 e non al "cosa"
 
+Fare refactoring del codice per le Card (in generale)
+
 ****************************** IDEE DI PROGETTO ******************************
 Per ogni articolo, permettere all'utente di fare click su di esso 
 e visualizzare il titolo e la descrizione. 

@@ -19,7 +19,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       /// "foregroundColor" controlla il colore di tutti gli elementi
       /// foreground dell’AppBar
-      foregroundColor: Colors.black,
+      foregroundColor: Colors.white,
 
       /// title di AppBar con Container
       title: Container(
@@ -28,6 +28,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(10),
+          // bordo (Container)
+          border: Border.all(
+            // colore bordo (Container)
+            color: Colors.green,
+            // spessore bordo (Container)
+            width: 2,
+          ),
         ),
         child: Text(
           "News!",
@@ -73,7 +80,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
 
       /// colore di sfondo (AppBar)
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
+      // backgroundColor: Colors.white, TO DO
     );
   }
 

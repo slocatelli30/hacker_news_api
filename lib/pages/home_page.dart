@@ -224,7 +224,7 @@ class _HomePageState extends State<HomePage> {
       ),
 
       // colore di sfondo (Scaffold)
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black,
     );
   }
 
@@ -308,26 +308,49 @@ class _HomePageState extends State<HomePage> {
           itemCount: stories.length,
 
           /// itemBuilder
-          itemBuilder: (context, index) => ListTile(
-            /// title (titolo)
-            title: Text(
-              stories[index].title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+          itemBuilder: (context, index) => Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            // nessuna ombreggiatura
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              // proprietà bordo (Card)
+              side: const BorderSide(
+                // colore bordo (Card)
+                color: Colors.green, // 👈 colore del bordo
+                // spessore bordo (Card)
+                width: 2, // 👈 spessore
+              ),
             ),
+            // colore sfondo (Card)
+            color: Colors.black,
 
-            /// subtitle (autore)
-            subtitle: Text(
-              // autore
-              stories[index].author,
-              // stile di Text per autore
-              style: const TextStyle(fontStyle: FontStyle.italic),
+            child: ListTile(
+              /// title (titolo)
+              title: Text(
+                stories[index].title,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              /// subtitle (autore)
+              subtitle: Text(
+                // autore
+                stories[index].author,
+                // stile di Text per autore
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
             ),
           ),
 
           /// separatorBuilder
           /// divisore tra una news e l'altra
-          separatorBuilder: (context, index) =>
-              Divider(color: Colors.grey.shade300),
+          separatorBuilder: (context, index) => Divider(color: Colors.black),
         ),
       );
     },

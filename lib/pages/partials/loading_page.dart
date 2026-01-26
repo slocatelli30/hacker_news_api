@@ -11,13 +11,13 @@ class LoadingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // colore di sfondo (Container)
-      color: Colors.white,
+      color: Colors.black,
       // allineamento del Container
       alignment: Alignment.center,
       // child di Container
       child: CircularProgressIndicator(
         // colore della CircularProgressIndicator
-        color: Colors.black,
+        color: Colors.white,
       ),
     );
   }
