@@ -19,3 +19,13 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  # per fonts
+  fonts:
+    - family: CascadiaCode
+      fonts:
+        - asset: assets/fonts/CascadiaCode-Regular.ttf
+        - asset: assets/fonts/CascadiaCode-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/CascadiaCode-Italic.ttf
+          style: italic
+

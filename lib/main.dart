@@ -15,7 +15,10 @@ class App extends StatelessWidget {
   /// override del metodo build
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      /// tema globale
+      theme: ThemeData(fontFamily: "CascadiaCode"),
+
       /// home con istanza di HomePage
       home: HomePage(),
 

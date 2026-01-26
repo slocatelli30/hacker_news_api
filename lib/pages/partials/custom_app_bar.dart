@@ -46,6 +46,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             fontSize: 17,
             // grassetto
             fontWeight: FontWeight.bold,
+            // font
+            fontFamily: "CascadiaCode",
+            // letterSpacing leggero
+            letterSpacing: 1.5,
           ),
         ),
       ),
@@ -81,7 +85,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
       /// colore di sfondo (AppBar)
       backgroundColor: Colors.black,
-      // backgroundColor: Colors.white, TO DO
     );
   }
 
