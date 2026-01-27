@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hacker_news_api/components/info_snack_bar.dart';
+import 'package:hacker_news_api/components/story_card.dart';
 import 'package:hacker_news_api/pages/partials/custom_app_bar.dart';
 import 'package:hacker_news_api/pages/partials/error_info_page.dart';
 import 'package:hacker_news_api/pages/partials/loading_page.dart';
@@ -308,45 +309,7 @@ class _HomePageState extends State<HomePage> {
           itemCount: stories.length,
 
           /// itemBuilder
-          itemBuilder: (context, index) => Card(
-            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            // nessuna ombreggiatura
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-              // proprietà bordo (Card)
-              side: const BorderSide(
-                // colore bordo (Card)
-                color: Colors.green, // 👈 colore del bordo
-                // spessore bordo (Card)
-                width: 2, // 👈 spessore
-              ),
-            ),
-            // colore sfondo (Card)
-            color: Colors.black,
-
-            child: ListTile(
-              /// title (titolo)
-              title: Text(
-                stories[index].title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              /// subtitle (autore)
-              subtitle: Text(
-                // autore
-                stories[index].author,
-                // stile di Text per autore
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontStyle: FontStyle.italic,
-                ),
-              ),
-            ),
-          ),
+          itemBuilder: (context, index) => StoryCard(story: stories[index]),
 
           /// separatorBuilder
           /// divisore tra una news e l'altra
