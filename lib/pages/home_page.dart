@@ -308,12 +308,13 @@ class _HomePageState extends State<HomePage> {
           /// itemCount
           itemCount: stories.length,
 
-          /// itemBuilder
+          /// itemBuilder + StoryCard per visualizz. informazioni
           itemBuilder: (context, index) => StoryCard(story: stories[index]),
 
           /// separatorBuilder
           /// divisore tra una news e l'altra
-          separatorBuilder: (context, index) => Divider(color: Colors.black),
+          separatorBuilder: (context, index) =>
+              const Divider(color: Colors.black),
         ),
       );
     },

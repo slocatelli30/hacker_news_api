@@ -3,7 +3,7 @@ import 'package:hacker_news_api/models/story_model.dart';
 
 /// StoryCard (refactoring del codice)
 class StoryCard extends StatelessWidget {
-  /// TO DO - perché questa variabile
+  /// istanza specifica di StoryModel che devo mostrare nella Card
   final StoryModel story;
 
   /// costruttore
@@ -13,10 +13,12 @@ class StoryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      // più "respiro" lateralmente + tenere le Card più vicine tra loro verticalmen.
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       // nessuna ombreggiatura
       elevation: 0,
       shape: RoundedRectangleBorder(
+        // questa Card non è un rettangolo secco, ma ha gli angoli arrotondati
         borderRadius: BorderRadius.circular(10),
         // proprietà bordo (Card)
         side: const BorderSide(
@@ -30,11 +32,14 @@ class StoryCard extends StatelessWidget {
       color: Colors.black,
 
       child: ListTile(
-        /// title (titolo)
+        /// title (ListTile)
         title: Text(
           story.title,
+          // stile title (ListTile)
           style: const TextStyle(
+            // colore title
             color: Colors.white,
+            // grassetto title
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -45,7 +50,9 @@ class StoryCard extends StatelessWidget {
           story.author,
           // stile di Text per autore
           style: const TextStyle(
+            // colore subtitle
             color: Colors.white,
+            // stile font subtitle
             fontStyle: FontStyle.italic,
           ),
         ),
