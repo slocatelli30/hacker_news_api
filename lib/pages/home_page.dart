@@ -309,7 +309,11 @@ class _HomePageState extends State<HomePage> {
           itemCount: stories.length,
 
           /// itemBuilder + StoryCard per visualizz. informazioni
-          itemBuilder: (context, index) => StoryCard(story: stories[index]),
+          itemBuilder: (context, index) => StoryCard(
+            story: stories[index],
+            // passo _refreshInProgress per colore bordo Card durante refresh
+            refreshInProgress: _refreshInProgress,
+          ),
 
           /// separatorBuilder
           /// divisore tra una news e l'altra

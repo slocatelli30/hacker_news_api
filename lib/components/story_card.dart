@@ -6,8 +6,18 @@ class StoryCard extends StatelessWidget {
   /// istanza specifica di StoryModel che devo mostrare nella Card
   final StoryModel story;
 
+  /// In base al valore di refreshInProgress,
+  /// gestisco il colore del bordo della Card.
+  /// Durante il refresh -> bordo orange
+  /// Altrimenti -> bordo green
+  final bool refreshInProgress;
+
   /// costruttore
-  const StoryCard({super.key, required this.story});
+  const StoryCard({
+    super.key,
+    required this.story,
+    required this.refreshInProgress,
+  });
 
   /// override del metodo build
   @override
@@ -21,9 +31,10 @@ class StoryCard extends StatelessWidget {
         // questa Card non è un rettangolo secco, ma ha gli angoli arrotondati
         borderRadius: BorderRadius.circular(10),
         // proprietà bordo (Card)
-        side: const BorderSide(
-          // colore bordo (Card)
-          color: Colors.green,
+        side: BorderSide(
+          /// Colore bordo (Card)
+          /// Bordo Card orange solo durante il refresh, altrimenti green
+          color: refreshInProgress ? Colors.orange : Colors.green,
           // spessore bordo (Card)
           width: 2,
         ),
