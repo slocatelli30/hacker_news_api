@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   # http
   http: ^1.6.0
+  # aprire link nel browser
+  url_launcher: ^6.3.0
 
 dev_dependencies:
   flutter_test:

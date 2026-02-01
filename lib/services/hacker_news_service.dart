@@ -149,4 +149,56 @@ class HackerNewsService {
     // ritorno le stories
     return stories;
   }
+
+  /// Recupera i dettagli di una singola story dato l'identificativo.
+  /// Ritorna null se la story non è disponibile o il payload è invalido.
+  Future<StoryModel?> fetchStoryById(int storyId) async {
+    const timeoutDuration = Duration(seconds: 10);
+
+    try {
+      final response = await http
+          .get(
+            Uri.parse(
+              "https://hacker-news.firebaseio.com/v0/item/$storyId.json?print=pretty",
+            ),
+          )
+          .timeout(timeoutDuration);
+
+      if (response.statusCode != 200) {
+        debugPrint(
+          "HackerNewsService: item $storyId "
+          "HTTP ${response.statusCode} "
+          "(${response.request?.url})",
+        );
+        return null;
+      }
+
+      dynamic decodedItem;
+      try {
+        decodedItem = json.decode(response.body);
+      } on FormatException catch (e) {
+        debugPrint("HackerNewsService: item $storyId JSON non valido: $e");
+        return null;
+      }
+
+      if (decodedItem == null) {
+        debugPrint("HackerNewsService: item $storyId restituito null");
+        return null;
+      }
+
+      if (decodedItem is! Map<String, dynamic>) {
+        debugPrint(
+          "HackerNewsService: item $storyId payload non Map "
+          "(${decodedItem.runtimeType})",
+        );
+        return null;
+      }
+
+      return StoryModel.fromData(decodedItem);
+    } catch (e, s) {
+      debugPrint("HackerNewsService: item $storyId errore inatteso: $e");
+      debugPrint(s.toString());
+      return null;
+    }
+  }
 }

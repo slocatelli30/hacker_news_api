@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hacker_news_api/components/info_snack_bar.dart';
 import 'package:hacker_news_api/components/story_card.dart';
+import 'package:hacker_news_api/pages/details_page.dart';
 import 'package:hacker_news_api/pages/partials/custom_app_bar.dart';
 import 'package:hacker_news_api/pages/partials/error_info_page.dart';
 import 'package:hacker_news_api/pages/partials/loading_page.dart';
@@ -313,6 +314,15 @@ class _HomePageState extends State<HomePage> {
             story: stories[index],
             // passo _refreshInProgress per colore bordo Card durante refresh
             refreshInProgress: _refreshInProgress,
+            // TO DO - ...
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => DetailsPage(storyId: stories[index].id),
+                ),
+              );
+            },
           ),
 
           /// separatorBuilder

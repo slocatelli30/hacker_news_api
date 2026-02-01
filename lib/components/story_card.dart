@@ -12,59 +12,71 @@ class StoryCard extends StatelessWidget {
   /// Altrimenti -> bordo green
   final bool refreshInProgress;
 
+  /// callback eseguita quando l'utente tocca la card
+  final VoidCallback? onTap;
+
   /// costruttore
   const StoryCard({
     super.key,
     required this.story,
     required this.refreshInProgress,
+    this.onTap,
   });
 
   /// override del metodo build
   @override
   Widget build(BuildContext context) {
-    return Card(
-      // più "respiro" lateralmente + tenere le Card più vicine tra loro verticalmen.
-      margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      // nessuna ombreggiatura
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        // questa Card non è un rettangolo secco, ma ha gli angoli arrotondati
-        borderRadius: BorderRadius.circular(10),
-        // proprietà bordo (Card)
-        side: BorderSide(
-          /// Colore bordo (Card)
-          /// Bordo Card orange solo durante il refresh, altrimenti green
-          color: refreshInProgress ? Colors.orange : Colors.green,
-          // spessore bordo (Card)
-          width: 2,
-        ),
-      ),
-      // colore sfondo (Card)
-      color: Colors.black,
+    /// costante locale per coerenza e per far combaciare ripple + forma della card
+    const borderRadius = BorderRadius.all(Radius.circular(10));
 
-      child: ListTile(
-        /// title (ListTile)
-        title: Text(
-          story.title,
-          // stile title (ListTile)
-          style: const TextStyle(
-            // colore title
-            color: Colors.white,
-            // grassetto title
-            fontWeight: FontWeight.bold,
+    /// TO DO - ...
+    return InkWell(
+      borderRadius: borderRadius,
+      onTap: onTap,
+      child: Card(
+        // più "respiro" lateralmente + tenere le Card più vicine tra loro verticalmen.
+        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        // nessuna ombreggiatura
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          // questa Card non è un rettangolo secco, ma ha gli angoli arrotondati
+          borderRadius: BorderRadius.circular(10),
+          // proprietà bordo (Card)
+          side: BorderSide(
+            /// Colore bordo (Card)
+            /// Bordo Card orange solo durante il refresh, altrimenti green
+            color: refreshInProgress ? Colors.orange : Colors.green,
+            // spessore bordo (Card)
+            width: 2,
           ),
         ),
+        // colore sfondo (Card)
+        color: Colors.black,
 
-        /// subtitle (autore)
-        subtitle: Text(
-          // autore
-          story.author,
-          // stile di Text per autore
-          style: const TextStyle(
-            // colore subtitle
-            color: Colors.white,
-            // stile font subtitle
-            fontStyle: FontStyle.italic,
+        child: ListTile(
+          /// title (ListTile)
+          title: Text(
+            story.title,
+            // stile title (ListTile)
+            style: const TextStyle(
+              // colore title
+              color: Colors.white,
+              // grassetto title
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+
+          /// subtitle (autore)
+          subtitle: Text(
+            // autore
+            story.author,
+            // stile di Text per autore
+            style: const TextStyle(
+              // colore subtitle
+              color: Colors.white,
+              // stile font subtitle
+              fontStyle: FontStyle.italic,
+            ),
           ),
         ),
       ),
