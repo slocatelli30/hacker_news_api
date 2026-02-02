@@ -9,3 +9,5 @@ https://hacker-news.firebaseio.com/v0/item/46376006.json?print=pretty
 link di stories con campo "text" non "null":
 - storyId: 40025364
 - storyId: 46506261
+- storyId: 46850205
+- storyId: 46847780 (con codice HTML puro)
