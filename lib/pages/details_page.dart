@@ -160,7 +160,11 @@ class _DetailsPageState extends State<DetailsPage> {
               ],
 
               if (story.text != null) ...[
-                Text(story.text!, style: Theme.of(context).textTheme.bodyLarge),
+                Text(
+                  story.text!,
+                  style: TextStyle(color: Colors.white),
+                  // style: Theme.of(context).textTheme.bodyLarge TO DO - da valutare
+                ),
               ] else ...[
                 const Text(
                   "No text provided by Hacker News.",

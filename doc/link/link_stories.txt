@@ -6,3 +6,6 @@ link di una stories casuale:
 https://hacker-news.firebaseio.com/v0/item/46400251.json?print=pretty
 https://hacker-news.firebaseio.com/v0/item/46376006.json?print=pretty
 
+link di stories con campo "text" non "null":
+- storyId: 40025364
+- storyId: 46506261
