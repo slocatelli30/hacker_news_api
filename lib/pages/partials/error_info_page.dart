@@ -38,7 +38,15 @@ class ErrorInfoPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           // informazioni messaggio
-          Text(infoText, style: TextStyle(fontStyle: FontStyle.italic)),
+          Text(
+            infoText,
+            style: TextStyle(
+              // colore info messaggio
+              color: Colors.white,
+              // font info messaggio
+              fontStyle: FontStyle.italic,
+            ),
+          ),
           // spaziatura verticale
           const SizedBox(height: 12),
 

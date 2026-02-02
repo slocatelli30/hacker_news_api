@@ -65,12 +65,23 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Dettaglio notizia")),
+      // colore sfondo pagina dettagli
+      backgroundColor: Colors.black,
+
+      appBar: AppBar(
+        title: const Text("Dettaglio notizia"),
+        // colore elementi in primo piano
+        foregroundColor: Colors.white,
+        // colore elementi in secondo piano
+        backgroundColor: Colors.black,
+      ),
       body: FutureBuilder<StoryModel?>(
         future: _storyFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.white),
+            );
           }
 
           if (snapshot.hasError) {
@@ -105,17 +116,28 @@ class _DetailsPageState extends State<DetailsPage> {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              /// titolo news
               Text(
+                // testo titolo news
                 story.title,
-                style: Theme.of(context).textTheme.headlineSmall,
+                // stile testo titolo news
+                style: TextStyle(color: Colors.white),
+
+                // style: Theme.of(context).textTheme.headlineSmall, TO DO - da valutare
               ),
+
+              /// spaziatura verticale
               const SizedBox(height: 8),
 
+              /// autore + id news
               Text(
-                "di ${story.author} • id: ${story.id}",
-                style: Theme.of(context).textTheme.bodyMedium,
+                "by ${story.author} • id: ${story.id}",
+                style: TextStyle(color: Colors.white),
+
+                // style: Theme.of(context).textTheme.bodyMedium, TO DO - da valutare
               ),
 
+              /// spaziatura verticale
               const SizedBox(height: 16),
 
               if (story.url != null) ...[
@@ -124,6 +146,15 @@ class _DetailsPageState extends State<DetailsPage> {
                   onPressed: () => _openUrl(story.url!),
                   icon: const Icon(Icons.open_in_new),
                   label: const Text("Apri articolo"),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    foregroundColor: Colors.white,
+                    elevation: 0,
+                    side: const BorderSide(color: Colors.green, width: 1.5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 16),
               ],
@@ -131,7 +162,10 @@ class _DetailsPageState extends State<DetailsPage> {
               if (story.text != null) ...[
                 Text(story.text!, style: Theme.of(context).textTheme.bodyLarge),
               ] else ...[
-                const Text("Nessun testo disponibile."),
+                const Text(
+                  "No text provided by Hacker News.",
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ],
           );

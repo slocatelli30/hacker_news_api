@@ -32,6 +32,7 @@ class StoryCard extends StatelessWidget {
     /// TO DO - ...
     return InkWell(
       borderRadius: borderRadius,
+      // quando utente click su Card, viene visualizzata pagina dettagli
       onTap: onTap,
       child: Card(
         // più "respiro" lateralmente + tenere le Card più vicine tra loro verticalmen.

@@ -319,7 +319,9 @@ class _HomePageState extends State<HomePage> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => DetailsPage(storyId: stories[index].id),
+                  builder: (_) => 
+                  // passo solo l'id della news, così da fare la chiamata per id
+                  DetailsPage(storyId: stories[index].id),
                 ),
               );
             },

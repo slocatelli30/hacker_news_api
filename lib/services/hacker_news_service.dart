@@ -152,6 +152,7 @@ class HackerNewsService {
 
   /// Recupera i dettagli di una singola story dato l'identificativo.
   /// Ritorna null se la story non è disponibile o il payload è invalido.
+  /// TO DO - da commentare...
   Future<StoryModel?> fetchStoryById(int storyId) async {
     const timeoutDuration = Duration(seconds: 10);
 
