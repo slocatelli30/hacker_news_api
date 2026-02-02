@@ -309,18 +309,28 @@ class _HomePageState extends State<HomePage> {
           /// itemCount
           itemCount: stories.length,
 
+          /// Costruisce ogni elemento della lista tramite StoryCard.
           /// itemBuilder + StoryCard per visualizz. informazioni
           itemBuilder: (context, index) => StoryCard(
+            // Story da visualizzare nella Card
             story: stories[index],
-            // passo _refreshInProgress per colore bordo Card durante refresh
+
+            /// Stato del refresh per gestire il colore del bordo
+            /// -> passo _refreshInProgress per colore bordo Card durante refresh
             refreshInProgress: _refreshInProgress,
-            // TO DO - ...
+
+            /// Callback eseguita al tap sulla Card
             onTap: () {
+              /// Navigazione verso la pagina di dettaglio
               Navigator.push(
                 context,
+
+                /// Rotta Material verso DetailsPage
                 MaterialPageRoute(
                   builder: (_) =>
-                      // passo solo l'id della news, così da fare la chiamata per id
+                      /// Passaggio dell'id per recuperare i dettagli della news
+                      /// -> passo solo l'id della news, così da fare la chiamata
+                      /// e recuperare la news in base all'id
                       DetailsPage(storyId: stories[index].id),
                 ),
               );

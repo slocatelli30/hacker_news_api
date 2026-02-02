@@ -29,7 +29,7 @@ class StoryCard extends StatelessWidget {
     /// costante locale per coerenza e per far combaciare ripple + forma della card
     const borderRadius = BorderRadius.all(Radius.circular(10));
 
-    /// TO DO - ...
+    /// Rendo l'intera Card tappabile con feedback visivo coerente
     return InkWell(
       borderRadius: borderRadius,
       // quando utente click su Card, viene visualizzata pagina dettagli

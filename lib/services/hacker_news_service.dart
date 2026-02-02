@@ -151,42 +151,56 @@ class HackerNewsService {
   }
 
   /// Recupera i dettagli di una singola story dato l'identificativo.
-  /// Ritorna null se la story non è disponibile o il payload è invalido.
-  /// TO DO - da commentare...
+  /// Ritorna null in caso di errore di rete, payload non valido o dati assenti.
   Future<StoryModel?> fetchStoryById(int storyId) async {
+    /// Durata massima consentita per la richiesta HTTP
     const timeoutDuration = Duration(seconds: 10);
 
     try {
+      /// Esegue la richiesta HTTP GET verso l'endpoint Hacker News
+      /// e interrompe l'attesa se supera il timeout specificato
       final response = await http
           .get(
+            /// Costruzione dell'URI della risorsa tramite id della story
             Uri.parse(
               "https://hacker-news.firebaseio.com/v0/item/$storyId.json?print=pretty",
             ),
           )
           .timeout(timeoutDuration);
 
+      /// Verifica esito della risposta HTTP
+      /// Codici diversi da 200 indicano una risposta non valida
       if (response.statusCode != 200) {
+        /// Log diagnostico per analisi e debug
         debugPrint(
           "HackerNewsService: item $storyId "
           "HTTP ${response.statusCode} "
           "(${response.request?.url})",
         );
+
+        /// Interruzione flusso con valore nullo
         return null;
       }
 
+      /// Variabile per contenere il payload JSON decodificato
       dynamic decodedItem;
+
       try {
+        // Decodifica del corpo della risposta da JSON a struttura Dart
         decodedItem = json.decode(response.body);
       } on FormatException catch (e) {
+        // Gestione JSON malformato o non decodificabile
         debugPrint("HackerNewsService: item $storyId JSON non valido: $e");
         return null;
       }
 
+      /// Verifica che il payload non sia nullo
       if (decodedItem == null) {
         debugPrint("HackerNewsService: item $storyId restituito null");
         return null;
       }
 
+      /// Verifica che il payload abbia la struttura attesa (Map)
       if (decodedItem is! Map<String, dynamic>) {
         debugPrint(
           "HackerNewsService: item $storyId payload non Map "
@@ -195,10 +209,14 @@ class HackerNewsService {
         return null;
       }
 
+      /// Conversione del payload validato nel modello applicativo
       return StoryModel.fromData(decodedItem);
     } catch (e, s) {
+      // Gestione di errori inattesi (rete, timeout, runtime)
       debugPrint("HackerNewsService: item $storyId errore inatteso: $e");
+      // Stampa dello stack trace per debugging approfondito
       debugPrint(s.toString());
+      // Ritorno di null per segnalare il fallimento dell'operazione
       return null;
     }
   }
