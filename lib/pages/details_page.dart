@@ -147,7 +147,13 @@ class _DetailsPageState extends State<DetailsPage> {
               /// autore + id news
               Text(
                 "by ${story.author} • id: ${story.id}",
-                style: TextStyle(color: Colors.white),
+                // stile testo di autore + id news
+                style: TextStyle(
+                  // colore testo di autore + id news
+                  color: Colors.white,
+                  // stile font testo di autore + id news
+                  fontStyle: FontStyle.italic,
+                ),
               ),
 
               /// spaziatura verticale
