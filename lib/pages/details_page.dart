@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 /// Modello dati della news
 import 'package:hacker_news_api/models/story_model.dart';
+import 'package:hacker_news_api/pages/partials/loading_page.dart';
 
 /// Servizio per il recupero dati da Hacker News
 import 'package:hacker_news_api/services/hacker_news_service.dart';
@@ -81,8 +82,12 @@ class _DetailsPageState extends State<DetailsPage> {
       backgroundColor: Colors.black,
 
       appBar: AppBar(
-        // titolo pagina dettagli
-        title: const Text("Dettaglio notizia"),
+        // titolo pagina dettagli + numero id news
+        title: Text(
+          "Dettaglio notizia #${widget.storyId}",
+          // stile titolo AppBar
+          style: TextStyle(fontSize: 17),
+        ),
         // colore contenuti/elementi in primo piano
         foregroundColor: Colors.white,
         // colore sfondo AppBar in pagina dettagli
@@ -95,9 +100,7 @@ class _DetailsPageState extends State<DetailsPage> {
         builder: (context, snapshot) {
           /// Stato di caricamento
           if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(
-              child: CircularProgressIndicator(color: Colors.white),
-            );
+            return const LoadingPage();
           }
 
           /// Stato di errore
@@ -138,7 +141,11 @@ class _DetailsPageState extends State<DetailsPage> {
                 // testo titolo news
                 story.title,
                 // stile testo titolo news
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  color: Colors.white,
+                  // testo titolo news grassetto
+                  fontWeight: FontWeight.bold,
+                ),
               ),
 
               /// spaziatura verticale
@@ -146,7 +153,7 @@ class _DetailsPageState extends State<DetailsPage> {
 
               /// autore + id news
               Text(
-                "by ${story.author} • id: ${story.id}",
+                "by ${story.author}",
                 // stile testo di autore + id news
                 style: TextStyle(
                   // colore testo di autore + id news
@@ -154,6 +161,8 @@ class _DetailsPageState extends State<DetailsPage> {
                   // stile font testo di autore + id news
                   fontStyle: FontStyle.italic,
                 ),
+                // allineamento testo a sinistra
+                textAlign: TextAlign.start,
               ),
 
               /// spaziatura verticale
@@ -165,7 +174,10 @@ class _DetailsPageState extends State<DetailsPage> {
                   // aprire link esterno
                   onPressed: () => _openUrl(story.url!),
                   icon: const Icon(Icons.open_in_new),
-                  label: const Text("Apri articolo"),
+                  label: const Text(
+                    "Apri articolo",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     foregroundColor: Colors.white,
@@ -185,7 +197,7 @@ class _DetailsPageState extends State<DetailsPage> {
               ] else ...[
                 const Text(
                   "No text provided by Hacker News.",
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: Colors.orange),
                 ),
               ],
             ],

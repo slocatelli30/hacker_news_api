@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   /// i metodi di quella classe
   final _service = HackerNewsService();
 
-  /// Cache dell’ultima lista valida mostrata.
+  /// Cache dell'ultima lista valida mostrata.
   /// Se non è null, NON mostriamo mai LoadingPage durante refresh.
   List<StoryModel>? _storiesCache;
 
