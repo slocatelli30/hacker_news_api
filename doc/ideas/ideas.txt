@@ -71,7 +71,8 @@ e non al "cosa"
 
 Fare refactoring del codice per le Card (in generale)
 
+Nella pagina dettagli: togliere internet e vedere cosa succede se si fa click
+sul bottone per aprire URL o si torna indietro nella HomePage
+
 ****************************** IDEE DI PROGETTO ******************************
-Per ogni articolo, permettere all'utente di fare click su di esso 
-e visualizzare il titolo e la descrizione. 
-Se quest'ultima non è disponibile, mostrare la scritta "Non disponibile"
+Rendere l'applicazione responsive
