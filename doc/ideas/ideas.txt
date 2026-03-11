@@ -76,5 +76,11 @@ Fare refactoring del codice (tutto il codice)
 Nella pagina dettagli: togliere internet e vedere cosa succede se si fa click
 sul bottone per aprire URL o si torna indietro nella HomePage
 
+Next step(s):
+- Riguardare il codice e capirlo bene
+- Screenshot grafica applicazione
+- Documenti pdf per salvare il codice + stamparli (eventualmente)
+- Informarsi su come rendere l'applicazione responsive 
+
 ****************************** IDEE DI PROGETTO ******************************
 Rendere l'applicazione responsive
